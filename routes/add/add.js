@@ -1,8 +1,9 @@
 const express = require('express');
 const pool = require('../../lib/pool');
 const router = express.Router();
+const { verify } = require('../../lib/token');
 
-router.post('/add',(req,res)=>{
+router.post('/add',verify,(req,res)=>{
     if(req.files.foto){
         var foto = req.files.foto;
         var { codigo,nombre,referencia,ubicacion,sede_bodega,descripcion } = req.body;
