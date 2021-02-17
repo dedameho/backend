@@ -26,10 +26,17 @@ router.post('/add',verify,(req,res)=>{
             }else{
                 pool.query('INSERT INTO products SET ?',[nuevoProducto],(err,results,fields)=>{
                     if(err){
-                        res.json({
-                            status:'error',
-                            message:err
-                        })
+                        if(err.code=='ER_DUP_ENTRY'){
+                            res.json({
+                                status:'error',
+                                message:'Ya hay un producto con ese codigo'
+                            })
+                        }else{
+                            res.json({
+                                status:'error',
+                                message:err
+                            })
+                        }
                     }else{
                         res.json({
                             status:'ok',

@@ -18,5 +18,6 @@ app.use(cookieParser());
 //routes
 app.use(require('./routes/auth/auth'));
 app.use(require('./routes/add/add'));
+app.use(require('./routes/listar/listar'));
 
 app.listen(3050,(console.log('Running on port 3050')));
