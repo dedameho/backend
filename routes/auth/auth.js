@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const router = express.Router();
 
+moment.locale('es');
+
 router.post('/login', (req, res) => {
     var {
         email,
@@ -22,15 +24,15 @@ router.post('/login', (req, res) => {
         } else {
             if (result[0]) {
                 var storedPassword = result[0].password;
-                var now = moment();
-                var expiration = moment(now).add(24,'hours');
+                var now = moment().parseZone();
+                var expiration = moment(now).add(19,'hours');
                 if (await helpers.matchPassword(password, storedPassword)) {
                     const payload = {
                         check: true,
                         user: email
                     }
                     const token = jwt.sign(payload, clave, {
-                        expiresIn: '24h'
+                        expiresIn: 86400
                     })
                     res.status(200).json({
                         status: 'ok',
