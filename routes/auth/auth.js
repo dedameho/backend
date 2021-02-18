@@ -15,7 +15,7 @@ router.post('/login', (req, res) => {
         email,
         password
     } = req.body;
-    pool.query('SELECT password FROM users WHERE email = ?', [email], async (error, result, fields) => {
+    pool.query('SELECT password,rol FROM users WHERE email = ?', [email], async (error, result, fields) => {
         if (error) {
             res.send(JSON.stringify({
                 status: 'error',
@@ -24,12 +24,14 @@ router.post('/login', (req, res) => {
         } else {
             if (result[0]) {
                 var storedPassword = result[0].password;
+                var rol=result[0].rol;
                 var now = moment().parseZone();
                 var expiration = moment(now).add(19,'hours');
                 if (await helpers.matchPassword(password, storedPassword)) {
                     const payload = {
                         check: true,
-                        user: email
+                        user: email,
+                        rol: rol
                     }
                     const token = jwt.sign(payload, clave, {
                         expiresIn: 86400
@@ -37,7 +39,8 @@ router.post('/login', (req, res) => {
                     res.status(200).json({
                         status: 'ok',
                         token: token,
-                        expires_at: expiration
+                        expires_at: expiration,
+                        rol:rol
                     })
                 } else {
                     res.json({
