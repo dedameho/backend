@@ -15,5 +15,17 @@ router.get('/getproducts',verify,(req,res)=>{
         }
     })
 })
+router.post('/getproduct',verify,(req,res)=>{
+    pool.query('SELECT * FROM products WHERE idproducts = ?',[req.body.id],(error,productos)=>{
+        if(error){
+            res.json({
+                status:'error',
+                message:error
+            })
+        }else{
+            res.json(productos);
+        }
+    })
+})
 
 module.exports = router;
